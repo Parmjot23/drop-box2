@@ -1,0 +1,173 @@
+/* style.css */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+main {
+    padding: 20px;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li {
+    background-color: #fff;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+ul li a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 20px;
+    }
+
+    main {
+        padding: 10px;
+    }
+}
+/* Container for all documents */
+.uploaded-documents {
+   display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Creates 4 columns */
+  grid-gap: 10px; /* Adjusts the space between items */
+}
+
+/* Individual document items */
+.uploaded-documents li {
+   width: 100%; /* Makes the thumbnail expand to fill the column */
+  aspect-ratio: 1; /* Optional: Keeps items square, you can adjust or remove this */
+}
+
+/* Style for the thumbnail image */
+.document-thumbnail img {
+    width: 100%; /* make image expand full width of its container */
+    height: auto; /* maintain aspect ratio */
+    border-radius: 8px; /* optional, for rounded corners */
+    display: block; /* ensures no extra space below the image */
+}
+
+/* Responsive adjustments for tablets */
+@media (max-width: 768px) {
+    .uploaded-documents li {
+        max-width: calc(50% - 16px); /* two per row on smaller tablets and large phones */
+    }
+}
+
+/* Responsive adjustments for mobile phones */
+@media (max-width: 480px) {
+    .uploaded-documents li {
+        max-width: 100%; /* full width on small phones */
+    }
+}
+
+/* Responsive adjustments for larger screens like desktops */
+@media (min-width: 992px) {
+    .uploaded-documents li {
+        max-width: calc(25% - 16px); /* four per row on desktops */
+    }
+}
+
+@media (min-width: 1200px) {
+    .uploaded-documents li {
+        max-width: calc(20% - 16px); /* five per row on large desktops */
+    }
+}
+.document-thumbnail img {
+    width: 100%; /* make image expand full width of its container */
+    height: auto; /* maintain aspect ratio */
+    border-radius: 8px; /* optional, for rounded corners */
+    display: block; /* ensures no extra space below the image */
+    transition: transform 0.3s ease-in-out; /* Combined transitions */
+    opacity: 0; /* Initial state with low opacity */
+}
+
+.aos-animate .document-thumbnail img {
+    opacity: 1;
+}
+
+/* Zoom effect on hover */
+.document-thumbnail img:hover {
+    transform: scale(1.05);
+}
+.success-message {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.success-message h2 {
+    color: #4CAF50; /* Success green */
+}
+
+.navigation-links {
+    margin-top: 20px;
+}
+
+.navigation-links a.btn {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.navigation-links a.btn:hover {
+    background-color: #0056b3;
+}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="uploaded-documents">
+    <h2>Photos</h2>
+    <ul id="myList">
+        {% for document in documents %}
+        <li data-aos="fade-up" data-aos-duration="800">
+            <div class="document-thumbnail">
+                <!-- Use the thumbnail or a generic image as a clickable link -->
+                {% if document.thumbnail %}
+                    <a href="{% url 'document_detail' document.id %}" target="_blank" rel="noopener noreferrer">
+                        <img src="{{ document.thumbnail.url }}" alt="Thumbnail" class="img-thumbnail">
+                    </a>
+                {% else %}
+                    <a href="{{ document.file.url }}" target="_blank" rel="noopener noreferrer">
+                        <img style="height:80px" src="{% static 'img.png' %}" alt="No thumbnail" class="img-thumbnail">
+                        <p>{{document.title}}</p>
+                    </a>
+                {% endif %}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Dropbox</title>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.css" />
+     <link rel="stylesheet" href="{% static 'mystyle.css' %}"><!-- Add your CSS files here -->
+</head>
+<body>
+<div class="navbar">
+  <a href="/">Home</a>
+  <a href="/photos">photos</a>
+  <a href="/videos">Video</a>
+    <a href="/others">Others</a>
+</div>
+
+    <main>
+        <div>
+        <select id="grid-selector">
+  <option value="4">four</option>
+  <option value="3">Three</option>
+  <option value="2">two</option>
+ <option value="1">One</option>
+</select>
+
+    </div>
+        {% block content %}
+        <!-- This block will be overridden by child templates -->
+        {% endblock %}
+    </main>
+     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        // Global settings:
+        once: true, // whether animation should happen only once - while scrolling down
+        mirror: false, // whether elements should animate out while scrolling past them
+      });
+      document.getElementById('grid-selector').addEventListener('change', function() {
+          var columns = this.value;
+          var list = document.getElementById('myList');
+          list.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+        });
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight') {
+                {% if next_document %}
+                    window.location.href = "{% url 'document_detail' next_document.id %}";
+                {% endif %}
+            } else if (event.key === 'ArrowLeft') {
+                {% if prev_document %}
+                    window.location.href = "{% url 'document_detail' prev_document.id %}";
+                {% endif %}
+            }
+        });
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        // Listen for touch start
+        document.addEventListener('touchstart', function(event) {
+            touchStartX = event.changedTouches[0].screenX;
+        }, false);
+
+        // Listen for touch end
+        document.addEventListener('touchend', function(event) {
+            touchEndX = event.changedTouches[0].screenX;
+            handleGesture();
+        }, false);
+
+        function handleGesture() {
+            if (touchEndX < touchStartX) {
+                {% if next_document %}
+                    window.location.href = "{% url 'document_detail' next_document.id %}";
+                {% endif %}
+                // Logic to go to next document
+                // Replace this console.log with your logic to navigate to the next document
+            }
+            if (touchEndX > touchStartX) {
+                {% if prev_document %}
+                    window.location.href = "{% url 'document_detail' prev_document.id %}";
+                {% endif %}
+                // Logic to go to previous document
+                // Replace this console.log with your logic to navigate to the previous document
+            }
+        }
+    </script>
+</body>
+</html>
