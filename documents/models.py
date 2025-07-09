@@ -3,6 +3,7 @@ import os
 
 from django.db import models
 from django.core.files.base import ContentFile
+from django.contrib.auth import get_user_model
 from moviepy.editor import VideoFileClip
 from PIL import Image
 from io import BytesIO
@@ -98,3 +99,13 @@ class Document(models.Model):
 
     def is_photo(self):
         return bool(re.match(r'.*\.(jpg|jpeg|png|gif)$', self.file.name, re.I))
+
+
+class Comment(models.Model):
+    document = models.ForeignKey(Document, related_name='comments', on_delete=models.CASCADE)
+    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Comment by {self.author} on {self.document}"

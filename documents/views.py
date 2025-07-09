@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from .forms import DocumentForm, DocumentRenameForm, FolderForm
-from .models import Document, Folder
+from .forms import DocumentForm, DocumentRenameForm, FolderForm, CommentForm
+from .models import Document, Folder, Comment
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
@@ -61,6 +61,20 @@ def others(request):
 def document_detail(request, document_id):
     document = get_object_or_404(Document, id=document_id)
 
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            Comment.objects.create(
+                document=document,
+                author=request.user,
+                text=form.cleaned_data['text']
+            )
+            return redirect('document_detail', document_id=document.id)
+    else:
+        form = CommentForm()
+
+    comments = document.comments.order_by('-created_at')
+
     # Identify the document type based on its extension
     if document.is_photo():
         queryset = Document.objects.filter(file__iregex=r'.*\.(jpg|jpeg|png|gif)$')
@@ -76,7 +90,10 @@ def document_detail(request, document_id):
     return render(request, 'document_detail.html', {
         'document': document,
         'next_document': next_document,
-        'prev_document': prev_document,    })
+        'prev_document': prev_document,
+        'comments': comments,
+        'comment_form': form,
+    })
 
 
 @login_required

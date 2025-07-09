@@ -1,5 +1,5 @@
 from django import forms
-from .models import Document, Folder
+from .models import Document, Folder, Comment
 
 
 class DocumentForm(forms.ModelForm):
@@ -18,3 +18,9 @@ class FolderForm(forms.ModelForm):
     class Meta:
         model = Folder
         fields = ['name']
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']
