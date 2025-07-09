@@ -6,9 +6,28 @@
     <form id="upload-form" method="post" action="{% url 'upload_file' %}" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
+        <label for="id_folder">Folder:</label>
+        <select name="folder" id="id_folder">
+            <option value="" selected>---</option>
+            {% for folder in folders %}
+            <option value="{{ folder.id }}">{{ folder.name }}</option>
+            {% endfor %}
+        </select>
+        <a href="{% url 'create_folder' %}">New Folder</a>
         <input type="file" name="file" multiple>
         <button type="submit">Upload</button>
     </form>
     <div id="progress-container"></div>
-</div>
+</div><h3>Uploaded Files</h3>
+<table>
+  <tr><th>Title</th><th>Folder</th><th>Size</th><th>Uploaded</th></tr>
+  {% for document in documents %}
+  <tr>
+    <td><a href="{% url 'document_detail' document.id %}">{{ document.title }}</a></td>
+    <td>{{ document.folder.name|default:'' }}</td>
+    <td>{{ document.size_display }}</td>
+    <td>{{ document.uploaded_at }}</td>
+  </tr>
+  {% endfor %}
+</table>
 <script src="{% static 'upload.js' %}"></script>{% endblock %}

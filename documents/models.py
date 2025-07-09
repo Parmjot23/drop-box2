@@ -1,22 +1,39 @@
 import re
+import os
 
 from django.db import models
 from django.core.files.base import ContentFile
 from moviepy.editor import VideoFileClip
 from PIL import Image
 from io import BytesIO
-import os
+
+
+class Folder(models.Model):
+    name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Document(models.Model):
     title = models.CharField(max_length=255, blank=True)
     file = models.FileField(upload_to='documents/')
+    folder = models.ForeignKey(
+        Folder, on_delete=models.SET_NULL, null=True, blank=True, related_name='documents'
+    )
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    size = models.PositiveIntegerField(null=True, blank=True)
     thumbnail = models.ImageField(upload_to='thumbnails/', blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.title:  # Only set the title if it's not already set
             self.title = os.path.basename(self.file.name)
+        if self.file and not self.size:
+            try:
+                self.size = self.file.size
+            except Exception:
+                self.size = None
         super(Document, self).save(*args, **kwargs)
 
         # Only generate thumbnails for image/video files
@@ -26,7 +43,7 @@ class Document(models.Model):
                     self.generate_video_thumbnail()
                 elif self.is_image():  # This checks if it's an image
                     self.generate_image_thumbnail()
-                super(Document, self).save(*args, **kwargs) # Save again with the thumbnail
+                super(Document, self).save(*args, **kwargs)  # Save again with the thumbnail
 
     def is_video(self):
         # Simple check based on file extension
@@ -39,6 +56,14 @@ class Document(models.Model):
         image_extensions = ['.jpg', '.jpeg', '.png', '.gif']
         file_extension = os.path.splitext(self.file.name)[1].lower()
         return file_extension in image_extensions
+
+    def size_display(self):
+        size = self.size or 0
+        for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
+            if size < 1024:
+                return f"{size:.1f} {unit}"
+            size /= 1024
+        return f"{size:.1f} PB"
 
     def generate_video_thumbnail(self):
         clip = VideoFileClip(self.file.path)
@@ -73,6 +98,3 @@ class Document(models.Model):
 
     def is_photo(self):
         return bool(re.match(r'.*\.(jpg|jpeg|png|gif)$', self.file.name, re.I))
-
-    def is_video(self):
-        return bool(re.match(r'.*\.(mp4|mov|avi|mkv)$', self.file.name, re.I))

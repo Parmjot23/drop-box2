@@ -123,6 +123,10 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'  # Where Django collects static files
 # Additional WhiteNoise configuration for efficiency
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# Authentication
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
