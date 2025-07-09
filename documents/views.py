@@ -2,6 +2,7 @@ from .forms import DocumentForm
 from .models import Document
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
 
 
 def main(request):
@@ -10,6 +11,8 @@ def main(request):
         for f in files:
             document = Document(file=f)
             document.save()
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'success': True})
         return redirect('home')
     else:
         form = DocumentForm()
