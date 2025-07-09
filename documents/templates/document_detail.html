@@ -5,4 +5,8 @@
 <div class="image-container">
     <img src="{{ document.file.url }}" alt="{{ document.title }}">
 </div>
+<div class="navigation-links">
+    <a class="btn" href="{% url 'rename_document' document.id %}">Rename</a>
+    <a class="btn" href="{% url 'delete_document' document.id %}">Delete</a>
+</div>
 {% endblock %}

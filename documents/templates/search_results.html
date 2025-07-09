@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="uploaded-documents">
+    <h2>Search results for "{{ query }}"</h2>
+    <ul id="myList">
+        {% for document in documents %}
+        <li data-aos="fade-up" data-aos-duration="800">
+            <div class="document-thumbnail">
+                {% if document.thumbnail %}
+                    <a href="{% url 'document_detail' document.id %}">
+                        <img src="{{ document.thumbnail.url }}" alt="Thumbnail" class="img-thumbnail">
+                    </a>
+                {% else %}
+                    <a href="{{ document.file.url }}">
+                        <img style="height:80px" src="{% static 'img.png' %}" alt="No thumbnail" class="img-thumbnail">
+                        <p>{{ document.title }}</p>
+                    </a>
+                {% endif %}
+            </div>
+        </li>
+        {% empty %}
+            <p>No documents found.</p>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

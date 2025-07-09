@@ -14,6 +14,10 @@
   <a href="/photos">photos</a>
   <a href="/videos">Video</a>
     <a href="/others">Others</a>
+  <form action="{% url 'search' %}" method="get" class="search-form">
+    <input type="text" name="q" placeholder="Search" value="{{ request.GET.q }}">
+    <button type="submit">Search</button>
+  </form>
 </div>
 
     <main>
