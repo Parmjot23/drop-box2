@@ -1,4 +1,4 @@
-from .forms import DocumentForm
+from .forms import DocumentForm, DocumentRenameForm
 from .models import Document
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
@@ -58,5 +58,38 @@ def document_detail(request, document_id):
     return render(request, 'document_detail.html', {
         'document': document,
         'next_document': next_document,
-        'prev_document': prev_document,
+        'prev_document': prev_document,    })
+
+
+def search(request):
+    query = request.GET.get('q', '')
+    documents = Document.objects.filter(title__icontains=query) if query else []
+    return render(request, 'search_results.html', {
+        'documents': documents,
+        'query': query,
+    })
+
+
+def delete_document(request, document_id):
+    document = get_object_or_404(Document, id=document_id)
+    if request.method == 'POST':
+        document.delete()
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'success': True})
+        return redirect('home')
+    return render(request, 'confirm_delete.html', {'document': document})
+
+
+def rename_document(request, document_id):
+    document = get_object_or_404(Document, id=document_id)
+    if request.method == 'POST':
+        form = DocumentRenameForm(request.POST, instance=document)
+        if form.is_valid():
+            form.save()
+            return redirect('document_detail', document_id=document.id)
+    else:
+        form = DocumentRenameForm(instance=document)
+    return render(request, 'rename_document.html', {
+        'form': form,
+        'document': document,
     })

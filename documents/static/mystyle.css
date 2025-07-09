@@ -45,10 +45,19 @@ body, html {
     transition: width 0.5s ease, background-color 0.5s ease;
   }
 
-  .navbar a:hover::after {
+.navbar a:hover::after {
     width: 100%;
     background: #f9d342;
-  }
+}
+.search-form {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+.search-form input {
+    padding: 5px;
+    margin-right: 5px;
+}
 header {
     background-color: #007bff;
     color: #fff;
