@@ -8,7 +8,7 @@ Uploaded files are stored on the server and can be browsed from any authenticate
 * **File upload and download** – Upload multiple files and access them from the browser.
 * **Folder organisation** – Create folders and assign uploaded files to them.
 * **Image and video previews** – Thumbnails are generated for images and videos for quick browsing.
-* **Search** – Simple search by file title.
+* **Search** – Search by file title, type and upload date.
 * **Authentication** – Login is required to access any view.
 * **Refresh button** – Quickly reload the page to see new files.
 
