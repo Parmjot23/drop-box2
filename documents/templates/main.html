@@ -3,11 +3,12 @@
 {% block content %}
 <div class="upload-form">
     <h2>Upload New Document</h2>
-    <form method="post" enctype="multipart/form-data">
+    <form id="upload-form" method="post" action="{% url 'upload_file' %}" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="file" name="file" multiple>
         <button type="submit">Upload</button>
     </form>
+    <div id="progress-container"></div>
 </div>
-{% endblock %}
+<script src="{% static 'upload.js' %}"></script>{% endblock %}

@@ -245,3 +245,9 @@ ul {
         max-height: 80vh;
     }
 }
+.upload-progress {
+    margin-bottom: 10px;
+}
+.upload-progress progress {
+    width: 100%;
+}
