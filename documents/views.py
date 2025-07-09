@@ -82,10 +82,32 @@ def document_detail(request, document_id):
 @login_required
 def search(request):
     query = request.GET.get('q', '')
-    documents = Document.objects.filter(title__icontains=query) if query else []
+    file_type = request.GET.get('type', '')
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+
+    documents = Document.objects.all()
+    if query:
+        documents = documents.filter(title__icontains=query)
+
+    if file_type == 'image':
+        documents = documents.filter(file__iregex=r'.*\.(jpg|jpeg|png|gif)$')
+    elif file_type == 'video':
+        documents = documents.filter(file__iregex=r'.*\.(mp4|mov|avi|mkv)$')
+    elif file_type == 'other':
+        documents = documents.exclude(file__iregex=r'.*\.(jpg|jpeg|png|gif|mp4|mov|avi|mkv)$')
+
+    if start_date:
+        documents = documents.filter(uploaded_at__date__gte=start_date)
+    if end_date:
+        documents = documents.filter(uploaded_at__date__lte=end_date)
+
     return render(request, 'search_results.html', {
         'documents': documents,
         'query': query,
+        'type': file_type,
+        'start_date': start_date,
+        'end_date': end_date,
     })
 
 

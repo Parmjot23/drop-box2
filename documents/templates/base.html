@@ -21,6 +21,14 @@
   {% endif %}
   <form action="{% url 'search' %}" method="get" class="search-form">
     <input type="text" name="q" placeholder="Search" value="{{ request.GET.q }}">
+    <select name="type">
+      <option value="" {% if not request.GET.type %}selected{% endif %}>All</option>
+      <option value="image" {% if request.GET.type == 'image' %}selected{% endif %}>Images</option>
+      <option value="video" {% if request.GET.type == 'video' %}selected{% endif %}>Videos</option>
+      <option value="other" {% if request.GET.type == 'other' %}selected{% endif %}>Others</option>
+    </select>
+    <input type="date" name="start_date" value="{{ request.GET.start_date }}">
+    <input type="date" name="end_date" value="{{ request.GET.end_date }}">
     <button type="submit">Search</button>
   </form>
   <button onclick="location.reload()">Refresh</button>

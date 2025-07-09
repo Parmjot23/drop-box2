@@ -3,6 +3,13 @@
 {% block content %}
 <div class="uploaded-documents">
     <h2>Search results for "{{ query }}"</h2>
+    {% if type or start_date or end_date %}
+        <p>
+        {% if type %}Type: {{ type }} {% endif %}
+        {% if start_date %}From {{ start_date }} {% endif %}
+        {% if end_date %}To {{ end_date }}{% endif %}
+        </p>
+    {% endif %}
     <ul id="myList">
         {% for document in documents %}
         <li data-aos="fade-up" data-aos-duration="800">
