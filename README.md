@@ -11,6 +11,7 @@ Uploaded files are stored on the server and can be browsed from any authenticate
 * **Search** – Search by file title, type and upload date.
 * **Authentication** – Login is required to access any view.
 * **Refresh button** – Quickly reload the page to see new files.
+* **Comments** – Leave notes on individual files for collaboration.
 
 Additional functionality such as LAN device discovery or peer‑to‑peer sync is not included.
 
