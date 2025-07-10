@@ -3,7 +3,19 @@
 {% block content %}
 
 <div class="image-container">
-    <img src="{{ document.file.url }}" alt="{{ document.title }}">
+    {% if prev_document %}
+        <a href="{% url 'document_detail' prev_document.id %}" class="nav-btn prev">&#10094;</a>
+    {% endif %}
+
+    {% if document.is_video %}
+        <video controls src="{{ document.file.url }}"></video>
+    {% else %}
+        <img src="{{ document.file.url }}" alt="{{ document.title }}">
+    {% endif %}
+
+    {% if next_document %}
+        <a href="{% url 'document_detail' next_document.id %}" class="nav-btn next">&#10095;</a>
+    {% endif %}
 </div>
 <div class="navigation-links">
     <a class="btn" href="{% url 'rename_document' document.id %}">Rename</a>
