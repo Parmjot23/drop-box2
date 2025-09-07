@@ -7,6 +7,8 @@
     <title>Local Dropbox</title>
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.css" />
      <link rel="stylesheet" href="{% static 'mystyle.css' %}"><!-- Add your CSS files here -->
+     <link rel="manifest" href="{% static 'manifest.webmanifest' %}">
+     <meta name="theme-color" content="#0d6efd">
 </head>
 <body>
 <div class="navbar">
@@ -52,6 +54,15 @@
         {% endblock %}
     </main>
      <script src="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.js"></script>
+     <script>
+       if ('serviceWorker' in navigator) {
+         window.addEventListener('load', function() {
+           navigator.serviceWorker.register('/service-worker.js').catch(function(err){
+             console.log('SW registration failed', err);
+           });
+         });
+       }
+     </script>
     <script>
       document.getElementById('navbar-toggle').addEventListener('click', function() {
         document.querySelector('.navbar').classList.toggle('open');
@@ -61,11 +72,18 @@
         once: true, // whether animation should happen only once - while scrolling down
         mirror: false, // whether elements should animate out while scrolling past them
       });
-      document.getElementById('grid-selector').addEventListener('change', function() {
-          var columns = this.value;
-          var list = document.getElementById('myList');
-          list.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
-        });
+      (function(){
+        var gridSelector = document.getElementById('grid-selector');
+        if (gridSelector) {
+          gridSelector.addEventListener('change', function() {
+            var columns = this.value;
+            var list = document.getElementById('myList');
+            if (list) {
+              list.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+            }
+          });
+        }
+      })();
         document.addEventListener('keydown', function(event) {
             if (event.key === 'ArrowRight') {
                 {% if next_document %}

@@ -9,11 +9,11 @@
             <div class="document-thumbnail">
                 <!-- Use the thumbnail or a generic image as a clickable link -->
                 {% if document.thumbnail %}
-                    <a href="{{ document.file.url }}" target="_blank" rel="noopener noreferrer">
+                    <a href="{% url 'document_detail' document.id %}">
                         <img src="{{ document.thumbnail.url }}" alt="Thumbnail" class="img-thumbnail">
                     </a>
                 {% else %}
-                    <a href="{{ document.file.url }}" target="_blank" rel="noopener noreferrer">
+                    <a href="{% url 'document_detail' document.id %}">
                         <img style="height:80px" src="{% static 'img.png' %}" alt="No thumbnail" class="img-thumbnail">
                         <p>{{document.title}}</p>
                     </a>

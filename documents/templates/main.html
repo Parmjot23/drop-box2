@@ -19,15 +19,21 @@
     </form>
     <div id="progress-container"></div>
 </div><h3>Uploaded Files</h3>
-<table>
-  <tr><th>Title</th><th>Folder</th><th>Size</th><th>Uploaded</th></tr>
-  {% for document in documents %}
-  <tr>
-    <td><a href="{% url 'document_detail' document.id %}">{{ document.title }}</a></td>
-    <td>{{ document.folder.name|default:'' }}</td>
-    <td>{{ document.size_display }}</td>
-    <td>{{ document.uploaded_at }}</td>
-  </tr>
-  {% endfor %}
-</table>
+<div class="table-responsive">
+  <table>
+    <thead>
+      <tr><th>Title</th><th>Folder</th><th>Size</th><th>Uploaded</th></tr>
+    </thead>
+    <tbody>
+      {% for document in documents %}
+      <tr>
+        <td data-label="Title"><a href="{% url 'document_detail' document.id %}">{{ document.title }}</a></td>
+        <td data-label="Folder">{{ document.folder.name|default:'' }}</td>
+        <td data-label="Size">{{ document.size_display }}</td>
+        <td data-label="Uploaded">{{ document.uploaded_at }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 <script src="{% static 'upload.js' %}"></script>{% endblock %}
