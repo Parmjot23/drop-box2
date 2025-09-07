@@ -4,6 +4,8 @@ from .models import Document, Folder, Comment
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
+from django.http import HttpResponse, HttpResponseNotFound
+from django.contrib.staticfiles import finders
 
 
 @login_required
@@ -93,6 +95,8 @@ def document_detail(request, document_id):
         'prev_document': prev_document,
         'comments': comments,
         'comment_form': form,
+        'is_video': document.is_video(),
+        'is_image': document.is_image(),
     })
 
 
@@ -165,3 +169,17 @@ def create_folder(request):
     else:
         form = FolderForm()
     return render(request, 'create_folder.html', {'form': form})
+
+
+def service_worker(request):
+    sw_path = finders.find('service-worker.js')
+    if sw_path:
+        try:
+            with open(sw_path, 'rb') as f:
+                content = f.read()
+            response = HttpResponse(content, content_type='application/javascript')
+            response['Service-Worker-Allowed'] = '/'
+            return response
+        except Exception:
+            return HttpResponseNotFound('Not Found')
+    return HttpResponseNotFound('Not Found')

@@ -7,10 +7,12 @@
         <a href="{% url 'document_detail' prev_document.id %}" class="nav-btn prev">&#10094;</a>
     {% endif %}
 
-    {% if document.is_video %}
-        <video controls src="{{ document.file.url }}"></video>
-    {% else %}
+    {% if is_video %}
+        <video controls playsinline src="{{ document.file.url }}"></video>
+    {% elif is_image %}
         <img src="{{ document.file.url }}" alt="{{ document.title }}">
+    {% else %}
+        <a class="btn" href="{{ document.file.url }}">Download file</a>
     {% endif %}
 
     {% if next_document %}

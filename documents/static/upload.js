@@ -2,6 +2,9 @@ function uploadFiles(form, fileInput) {
     const files = fileInput.files;
     const progressContainer = document.getElementById('progress-container');
     const csrfToken = form.querySelector('input[name=csrfmiddlewaretoken]').value;
+    const uploadButton = form.querySelector('button[type="submit"]');
+    const folderSelect = form.querySelector('#id_folder');
+    if (uploadButton) uploadButton.disabled = true;
     Array.from(files).forEach(file => {
         const wrapper = document.createElement('div');
         wrapper.className = 'upload-progress';
@@ -16,9 +19,14 @@ function uploadFiles(form, fileInput) {
 
         const formData = new FormData();
         formData.append('file', file);
+        if (folderSelect && folderSelect.value) {
+            formData.append('folder', folderSelect.value);
+        }
         const xhr = new XMLHttpRequest();
         xhr.open('POST', form.action);
         xhr.setRequestHeader('X-CSRFToken', csrfToken);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.responseType = 'json';
         xhr.upload.addEventListener('progress', e => {
             if (e.lengthComputable) {
                 progress.value = (e.loaded / e.total) * 100;
@@ -26,6 +34,13 @@ function uploadFiles(form, fileInput) {
         });
         xhr.addEventListener('load', () => {
             progress.value = 100;
+            label.textContent = file.name + ': Uploaded ✓';
+        });
+        xhr.addEventListener('error', () => {
+            label.textContent = file.name + ': Failed ✗';
+        });
+        xhr.addEventListener('loadend', () => {
+            if (uploadButton) uploadButton.disabled = false;
         });
         xhr.send(formData);
     });

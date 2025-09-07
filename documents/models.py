@@ -67,14 +67,18 @@ class Document(models.Model):
         return f"{size:.1f} PB"
 
     def generate_video_thumbnail(self):
-        clip = VideoFileClip(self.file.path)
-        frame = clip.get_frame(4)  # Get a frame at 1 second
-
-        frame_image = Image.fromarray(frame)
-        frame_io = BytesIO()
-        frame_image.save(frame_io, 'JPEG', quality=85)
-        self.thumbnail.save(f'{os.path.splitext(self.file.name)[0]}_thumbnail.jpg',
-                            ContentFile(frame_io.getvalue()), save=False)
+        try:
+            clip = VideoFileClip(self.file.path)
+            frame = clip.get_frame(4)
+            clip.close()
+            frame_image = Image.fromarray(frame)
+            frame_io = BytesIO()
+            frame_image.save(frame_io, 'JPEG', quality=85)
+            self.thumbnail.save(f'{os.path.splitext(self.file.name)[0]}_thumbnail.jpg',
+                                ContentFile(frame_io.getvalue()), save=False)
+        except Exception:
+            # Silently skip thumbnail generation if dependencies like ffmpeg are missing
+            return
 
     def generate_image_thumbnail(self):
         img = Image.open(self.file.path)
